@@ -1,18 +1,9 @@
-/* naranja-primary: #f12711
-naranja-secondary: #f5af19
-
-verde-primary: #1d8d36
-verde-secondary: #8ef519
-
-azul-primary: #09077c
-azul-secondary: #00b4db */
-
 *,
 *::before,
 *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 html {
@@ -30,24 +21,53 @@ html {
     --color-azul-secondary: #00b4db;
 }
 
-body{
+body {
     font-family: "Montserrat", sans-serif;
 }
 
-.card-containter{
+.card-containter {
     display: flex;
+    flex-wrap: wrap;
+    height: 100vh;
     justify-content: center;
     justify-items: center;
     padding: 4px;
-    width: 100%;
     min-width: 100%;
-    height: 100vh;
+    width: 100%;
 }
 
 .card {
-    height: 90vh;
-    width: 35px;
-    min-width: 35px;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 0.8px;
     box-shadow: 0 1.5px 4px rgb(0, 0, 0, 0.6);
-    margin: 2px;
+    display: flex;
+    flex: 0 0 calc(33% - 10px);
+    flex-direction: column;
+    height: 30vh;
+    justify-content: center;
+    min-width: 35px;
+    margin: 10px;
+    position: relative;
+    width: 200px;
+    z-index: 10;
+}
+
+.card-img {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    justify-content: center;
+    margin-top: -16px;
+    width: 100%;
+}
+
+.card-img img {
+    backface-visibility: hidden;
+    object-fit: cover;
+    height: auto;
+    margin-bottom: 2px;
+    transition: all 0.3s ease;
+    /* width: 25%; */
 }
