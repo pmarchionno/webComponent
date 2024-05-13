@@ -1,107 +1,103 @@
 const MIN_PAGE = 0;
-const MAX_PAGE = 0;
-const POKE_TAM = 9;
+const POKE_TAM = 12; // Número de Tarjetas por Página
+const apiPokeURL = 'https://pokeapi.co/api/v2/pokemon';
+const MAX_PAGE = (function () {
+    // Calculamos el máximo de páginas según el total de Pokémons y POKE_TAM
+    const totalPokemons = 0;
+    fetch(apiPokeURL)
+        .then(response => response.json())
+        .then(data => {
+            this.totalPokemons = data.count;
+        });
+    return Math.ceil(totalPokemons / POKE_TAM);
+})();
 const actualPage = 0;
 const poke_offset = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
-
     class PokeCard extends HTMLElement {
-        constructor() {
+        constructor(pokemonData) {
             super();
+            this.pokemonData = pokemonData || {};
         }
 
-        static get styles() {
-            return ``
+        static get observedAttributes() {
+            return ['pokemon-data'];
         }
 
-        connectedCallback() {
-            this.innerHTML = `
-            ${PokeCard.styles}
-
-            <div class="card">
-            <div>
-            <!--  <img id="img-pokeCard" src="" alt=""> -->
-                <h1>Imagen</h1>
-            </div>
-            <div>
-                <h1>Texto: Descripción</h1>
-            </div>
-            <div>
-                <h1>Atack: Descripción</h1>
-            </div>
-            <div>
-                <h1>Types: Descripción</h1>
-            </div>
-            <!-- 
-                id: el.data.id,
-                name: el.data.name.charAt(0).toUpperCase() + el.data.name.slice(1),
-                attack: el.data.stats[1].base_stat,
-                image: el.data.sprites.front_default,
-                flagId: false,
-                types: el.data.types.length > 0 ? el.data.types.map((obj) => obj.type.name) : []
-            -->
-
-        </div>
-            `;
-        }
-
-        setImg(image) {
-            if (image) {
-                console.log("SRC: " + image);
-                this.querySelector('#img-pokeCard').src = image;
-                this.querySelector('#img-pokeCard').alt = "Image Pokemon";
+        attributeChangedCallback(name, oldValue, newValue) {
+            if (name === 'pokemon-data' && newValue) {
+                const pokemon = JSON.parse(newValue);
+                this.render(pokemon);
             }
         }
+
+        render(pokemon) {
+            this.innerHTML = `
+            <div class="card">
+                <div class="card-img">
+                    <img class="img-pokeCard" src="${pokemon.sprites.front_default}" alt="Image of ${pokemon.name}">
+                </div>
+                <div class="border-1">
+                </div>
+                <div class="">
+                ${pokemon.name}
+                </div>
+                <div class="">
+                ${pokemon.name}
+                </div>
+                <div class="">
+                ${pokemon.name}
+                </div>
+                <div class="">
+                ${pokemon.name}
+                </div>
+                <div class="">
+                ${pokemon.name}
+                </div>
+                <h2 id="textPrincipal">${pokemon.name}</h2>
+            </div>
+            `;
+        }
     }
+
     customElements.define('poke-card', PokeCard);
-})
+});
 
 function getPokemons() {
-    const pokeApi = fetch('https://pokeapi.co/api/v2/pokemon?limit=' + POKE_TAM + '&offset=' + poke_offset)
-        .then(response => response.json()
-            .then(data => {
-                // console.log(data.results);
-                data.results.forEach(el => {
-                    drawPokemon(el.url);
-                }
-                )
-                return data.results;
-            })
-        );
+    fetch(apiPokeURL + '?limit=' + POKE_TAM + '&offset=' + poke_offset)
+        .then(response => response.json())
+        .then(data => {
+            data.results.forEach(el => {
+                drawPokemon(el.url);
+            });
+        });
 }
 
 function drawPokemon(url) {
-    // console.log('URL: ' + url);
-    const poke = fetch(url)
-        .then(response => response.json()
-            .then(data => {
-                const card = document.createElement('poke-card');
-                
-                if (data.sprites.front_default) {
-                    console.log(data.sprites.front_default);
-                    card.setImg(data.sprites.front_default);
-                }
-                // label.innerHTML = element.name;
-                document.getElementById("cards").appendChild(card);
-            }
-            )
-        )
-    //return data.results;
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const card = document.createElement('poke-card');
+            card.setAttribute('pokemon-data', JSON.stringify(data)); // Pass data as attribute
+            document.getElementById("cards").appendChild(card);
+        });
 }
 
 function nextPage() {
     if (actualPage < MAX_PAGE) {
         actualPage += 1;
         poke_offset = actualPage * POKE_TAM;
-        retrievePokemon();
+        getPokemons();
     }
 }
 
 function previewPage() {
     if (actualPage > MIN_PAGE) {
-        actualPage -= 1
+        actualPage -= 1;
         poke_offset = actualPage * POKE_TAM;
-        retrievePokemon();
+        getPokemons();
     }
 }
+
+window.onload = function () { getPokemons() };

@@ -1,0 +1,53 @@
+/* naranja-primary: #f12711
+naranja-secondary: #f5af19
+
+verde-primary: #1d8d36
+verde-secondary: #8ef519
+
+azul-primary: #09077c
+azul-secondary: #00b4db */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+:root {
+    --color-naranja-primary: #f12711;
+    --color-naranja-secondary: #f5af19;
+
+    --color-verde-primary: #1d8d36;
+    --color-verde-secondary: #8ef519;
+
+    --color-azul-primary: #09077c;
+    --color-azul-secondary: #00b4db;
+}
+
+body{
+    font-family: "Montserrat", sans-serif;
+}
+
+.card-containter{
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    padding: 4px;
+    width: 100%;
+    min-width: 100%;
+    height: 100vh;
+}
+
+.card {
+    height: 90vh;
+    width: 35px;
+    min-width: 35px;
+    box-shadow: 0 1.5px 4px rgb(0, 0, 0, 0.6);
+    margin: 2px;
+}
